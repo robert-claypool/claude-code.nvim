@@ -28,6 +28,9 @@ function M.open_editor()
   vim.bo[edit_buf].bufhidden = 'wipe'   -- Clean up when window closes
   vim.bo[edit_buf].filetype = 'markdown'
   vim.api.nvim_buf_set_name(edit_buf, 'claude://scratchpad_message')
+  
+  -- Enable word wrap for the scratchpad
+  vim.cmd('set wrap')
 
   -- Store terminal window ID - this is how we know where to send text
   vim.b._claude_target_win = term_win
