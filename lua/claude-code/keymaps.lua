@@ -52,6 +52,16 @@ function M.register_keymaps(claude_code, config)
     end
   end
 
+  -- Register scratchpad keymap if configured
+  if config.keymaps.scratchpad then
+    vim.api.nvim_set_keymap(
+      'n',
+      config.keymaps.scratchpad,
+      [[<cmd>lua require('claude-code.scratchpad').open_editor()<CR>]],
+      vim.tbl_extend('force', map_opts, { desc = 'Claude Code: Edit in scratchpad' })
+    )
+  end
+
   -- Register with which-key if it's available
   vim.defer_fn(function()
     local status_ok, which_key = pcall(require, 'which-key')
@@ -80,6 +90,14 @@ function M.register_keymaps(claude_code, config)
             }
           end
         end
+      end
+
+      -- Register scratchpad keymap with which-key
+      if config.keymaps.scratchpad then
+        which_key.add {
+          mode = 'n',
+          { config.keymaps.scratchpad, desc = 'Claude Code: Edit in scratchpad', icon = '✏️' },
+        }
       end
     end
   end, 100)

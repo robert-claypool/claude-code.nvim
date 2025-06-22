@@ -29,14 +29,15 @@ local M = {}
 
 --- ClaudeCodeKeymapsToggle class for toggle keymap configuration
 -- @table ClaudeCodeKeymapsToggle
--- @field normal string|boolean Normal mode keymap for toggling Claude Code, false to disable
--- @field terminal string|boolean Terminal mode keymap for toggling Claude Code, false to disable
+-- @field normal string|false Normal mode keymap for toggling Claude Code, false to disable
+-- @field terminal string|false Terminal mode keymap for toggling Claude Code, false to disable
 
 --- ClaudeCodeKeymaps class for keymap configuration
 -- @table ClaudeCodeKeymaps
 -- @field toggle ClaudeCodeKeymapsToggle Keymaps for toggling Claude Code
 -- @field window_navigation boolean Enable window navigation keymaps
 -- @field scrolling boolean Enable scrolling keymaps
+-- @field scratchpad string|false Normal mode keymap for opening scratchpad editor, false to disable
 
 --- ClaudeCodeCommandVariants class for command variant configuration
 -- @table ClaudeCodeCommandVariants
@@ -117,6 +118,7 @@ M.default_config = {
     },
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
     scrolling = true, -- Enable scrolling keymaps (<C-f/b>) for page up/down
+    scratchpad = '<leader>ce', -- Normal mode keymap for opening scratchpad editor
   },
 }
 
@@ -274,6 +276,10 @@ local function validate_config(config)
 
   if type(config.keymaps.scrolling) ~= 'boolean' then
     return false, 'keymaps.scrolling must be a boolean'
+  end
+
+  if not (config.keymaps.scratchpad == false or type(config.keymaps.scratchpad) == 'string') then
+    return false, 'keymaps.scratchpad must be a string or false'
   end
 
   return true, nil
